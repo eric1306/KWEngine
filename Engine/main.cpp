@@ -1,18 +1,7 @@
-﻿#include <windows.h>
+﻿#pragma once
 
-#pragma comment(lib, "user32")
-#pragma comment(lib, "d3d11")
-#pragma comment(lib, "d3dcompiler")
-
-#include <d3d11.h>
-#include <d3dcompiler.h>
-
-#include "ImGui/imgui.h"
-#include "ImGui/imgui_impl_dx11.h"
-#include "ImGui/imgui_impl_win32.h"
-#include "ImGui/imgui_internal.h"
-
-
+#include "pch.h"
+#include "Sphere.h"
 //forward declarations
 class UPrimitive;
 class UBall;
@@ -22,14 +11,6 @@ struct FVertexSimple;
 
 // UBall 객체를 보관할 배열 -> 많은 함수에서 접근하기 때문에 전역 변수로 선언
 UPrimitive** PrimitiveList;
-
-
-// 정점 정의 구조체
-struct FVertexSimple
-{
-	float x, y, z;     // position
-	float r, g, b, a;  // color
-};
 
 // 3차원 Vector 구조체
 struct FVector3
@@ -325,9 +306,6 @@ FVertexSimple cube_vertices[] =
 	{  0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.5f, 1.0f }, // Bottom-right (purple)
 };
 
-//구는 헤더파일로 대체
-#include "Sphere.h"
-
 #pragma endregion
 
 #pragma region 렌더러 클래스
@@ -512,13 +490,13 @@ public:
 		ID3DBlob* pixelShaderCSO;
 
 		HRESULT br =
-			D3DCompileFromFile(L"ShaderW0.hlsl", nullptr, nullptr, "mainVS",
+			D3DCompileFromFile(L"Shader/ShaderW0.hlsl", nullptr, nullptr, "mainVS",
 				"vs_5_0", 0, 0, &vertexShaderCSO, nullptr);
 
 		Device->CreateVertexShader(vertexShaderCSO->GetBufferPointer(), vertexShaderCSO->GetBufferSize(), nullptr,
 			OUT &SimpleVertexShader);
 
-		D3DCompileFromFile(L"ShaderW0.hlsl", nullptr, nullptr, "mainPS",
+		D3DCompileFromFile(L"Shader/ShaderW0.hlsl", nullptr, nullptr, "mainPS",
 			"ps_5_0", 0, 0, &pixelShaderCSO, nullptr);
 
 		Device->CreatePixelShader(pixelShaderCSO->GetBufferPointer(), pixelShaderCSO->GetBufferSize(), nullptr,
